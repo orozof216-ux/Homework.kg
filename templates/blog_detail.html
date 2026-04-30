@@ -1,0 +1,15 @@
+<h1>{{ blog_id.title }}</h1>
+
+<p>{{ blog_id.description }}</p>
+
+{% if blog_id.image %}
+    <img src="{{ blog_id.image.url }}" width="200" height="100">
+{% endif %}
+
+{% if blog_id.blog_file %}
+    <a href="{{ blog_id.blog_file.url }}">Смотреть</a>
+{% endif %}
+
+<p>{{ blog_id.quantity }}</p>
+<p>{{ blog_id.type_blog }}</p>
+<p>{{ blog_id.created_at }}</p>
