@@ -9,8 +9,11 @@ class Book(models.Model):
     genre = models.CharField(max_length=100)
     language = models.CharField(max_length=50)
     published_date = models.DateField()
-    cover = models.ImageField(upload_to='books/')
-    file = models.FileField(upload_to='books/files/')
+
+    # можно НЕ заполнять
+    cover = models.ImageField(upload_to='books/', blank=True, null=True)
+    file = models.FileField(upload_to='books/files/', blank=True, null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
