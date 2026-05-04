@@ -2,7 +2,6 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 
-# человек
 class Person(models.Model):
     name = models.CharField(max_length=100)
 
@@ -10,7 +9,6 @@ class Person(models.Model):
         return self.name
 
 
-# конь (1 человек = 1 конь)
 class Horse(models.Model):
     name = models.CharField(max_length=100)
     owner = models.OneToOneField(Person, on_delete=models.CASCADE)
@@ -27,7 +25,6 @@ class TourCompany(models.Model):
         return self.name
 
 
-# услуги (ManyToMany)
 class Service(models.Model):
     name = models.CharField(max_length=200)
     companies = models.ManyToManyField(TourCompany)
@@ -36,7 +33,6 @@ class Service(models.Model):
         return self.name
 
 
-# отзывы (оценка 1–5)
 class Review(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     company = models.ForeignKey(TourCompany, on_delete=models.CASCADE, related_name='reviews')
