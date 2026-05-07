@@ -1,57 +1,27 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import TourCompany, Booking
+from .models import Booking
 from .forms import BookingForm
-from django.db.models import Avg
 
-
-def company_list(request):
-    companies = TourCompany.objects.all().annotate(avg_rating=Avg('reviews__rating'))
-
-    return render(request, 'horse_list.html', {
-        'companies': companies
-    })
-
-
-# READ
 def booking_list(request):
     bookings = Booking.objects.all()
+    return render(request, 'booking/booking_list.html', {'bookings': bookings})
 
-    return render(request, 'booking/booking_list.html', {
-        'bookings': bookings
-    })
-
-
-# CREATE
 def booking_create(request):
     form = BookingForm(request.POST or None)
-
     if form.is_valid():
         form.save()
         return redirect('booking_list')
+    return render(request, 'booking/booking_form.html', {'form': form})
 
-    return render(request, 'booking/booking_form.html', {
-        'form': form
-    })
-
-
-# UPDATE
 def booking_update(request, id):
     booking = get_object_or_404(Booking, id=id)
-
     form = BookingForm(request.POST or None, instance=booking)
-
     if form.is_valid():
         form.save()
         return redirect('booking_list')
+    return render(request, 'booking/booking_form.html', {'form': form})
 
-    return render(request, 'booking/booking_form.html', {
-        'form': form
-    })
-
-
-# DELETE
 def booking_delete(request, id):
     booking = get_object_or_404(Booking, id=id)
     booking.delete()
-
     return redirect('booking_list')

@@ -22,10 +22,19 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
     path('books/', include('books.urls')),
     path('', include('blog.urls')),
     path('', include('auto.urls')),
+
+    # horse tour
     path('tours/', include('horse_tour.urls')),
+
+    # booking CRUD
+    path('booking/', include('booking.urls')),
+
+    # donate
+    path('', include('donates.urls')),
 ]
 
 if settings.DEBUG:

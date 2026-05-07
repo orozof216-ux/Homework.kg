@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'books',
     'auto', 
     'horse_tour',
+    'donates',
+    'booking',
 ]
 
 MIDDLEWARE = [

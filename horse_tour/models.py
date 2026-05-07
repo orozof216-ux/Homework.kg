@@ -46,3 +46,14 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.person} - {self.company} ({self.rating})"
+
+
+# 🐎 Booking (добавлено)
+class Booking(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    company = models.ForeignKey(TourCompany, on_delete=models.CASCADE)
+    date = models.DateField()
+    people_count = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.person} - {self.company} ({self.date})"

@@ -1,0 +1,12 @@
+<h1>Booking List</h1>
+
+<a href="/booking/create/">Create</a>
+
+{% for b in bookings %}
+<p>
+    {{ b.name }} - {{ b.company }} - {{ b.date }}
+
+    <a href="/booking/update/{{ b.id }}/">Edit</a>
+    <a href="/booking/delete/{{ b.id }}/">Delete</a>
+</p>
+{% endfor %}
