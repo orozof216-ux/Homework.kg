@@ -1,0 +1,13 @@
+<h1>Регистрация + Резюме</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <h3>Аккаунт</h3>
+    {{ user_form.as_p }}
+
+    <h3>Резюме</h3>
+    {{ resume_form.as_p }}
+
+    <button type="submit">Зарегистрироваться</button>
+</form>

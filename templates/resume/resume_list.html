@@ -1,0 +1,31 @@
+<h1>Список резюме</h1>
+
+<a href="/resume/logout/">Выйти</a>
+
+<hr>
+
+{% for resume in resumes %}
+
+    <div>
+        <h2>{{ resume.full_name }}</h2>
+
+        <p><b>Возраст:</b> {{ resume.age }}</p>
+        <p><b>Город:</b> {{ resume.city }}</p>
+        <p><b>Навыки:</b> {{ resume.skills }}</p>
+        <p><b>Опыт:</b> {{ resume.experience }}</p>
+        <p><b>О себе:</b> {{ resume.about }}</p>
+
+        {% if resume.photo %}
+            <img src="{{ resume.photo.url }}" width="150">
+        {% endif %}
+
+        <br>
+
+        {% if resume.resume_file %}
+            <a href="{{ resume.resume_file.url }}">Скачать резюме</a>
+        {% endif %}
+    </div>
+
+    <hr>
+
+{% endfor %}

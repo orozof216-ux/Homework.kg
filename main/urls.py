@@ -35,6 +35,12 @@ urlpatterns = [
 
     # donate
     path('', include('donates.urls')),
+
+    # users   
+    path('', include('users.urls')),
+
+    # resume
+    path('resume/', include('resume.urls')),
 ]
 
 if settings.DEBUG:
