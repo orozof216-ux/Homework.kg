@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'booking',
     'users',
     'resume',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -94,7 +95,6 @@ STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# ✔ ДОБАВИЛИ ЭТО (ВАЖНО)
 LOGIN_URL = '/resume/login/'
 LOGIN_REDIRECT_URL = '/resume/'
 LOGOUT_REDIRECT_URL = '/resume/login/'

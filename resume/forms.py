@@ -1,7 +1,8 @@
 from django import forms
 from .models import Resume
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from captcha.fields import CaptchaField
 
 
 class RegisterForm(UserCreationForm):
@@ -15,4 +16,8 @@ class RegisterForm(UserCreationForm):
 class ResumeForm(forms.ModelForm):
     class Meta:
         model = Resume
-        fields = '__all__'
+        exclude = ['user']
+
+
+class LoginForm(AuthenticationForm):
+    captcha = CaptchaField()
