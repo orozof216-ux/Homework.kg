@@ -1,4 +1,39 @@
+{% include 'header.html' %}
+
 <h1>Новости</h1>
+
+<form action="/search/" method="GET">
+    <input type="text" type="search" name="s" placeholder="Поиск">
+    <button type="submit">Поиск</button>
+</form>
+
+
+{% for i in blog  %}
+
+<h2>{{ i.title }}</h2>
+<img src="{{ i.image.url }}" alt="" width="150" height="100">
+<p>{{ i.created_at }}</p>
+<a href="{% url 'blog_id' i.id %}">Подробнее</a>
+
+{%  endfor  %}
+
+<div class="pagination">
+        <span class="step-links">
+            {% if blog.has_previous %}
+                <a href="?page=1">&laquo; Первая</a>
+                <a href="?page={{ blog.previous_page_number }}">Предыдущая</a>
+            {% endif %}
+
+            <span class="current">
+                Страница {{ blog.number }} из {{ blog.paginator.num_pages }}.
+            </span>
+
+            {% if blog.has_next %}
+                <a href="?page={{ blog.next_page_number }}">Следующая</a>
+                <a href="?page={{ blog.paginator.num_pages }}">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div><h1>Новости</h1>
  
 {% for i in blog  %}
 

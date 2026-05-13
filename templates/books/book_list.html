@@ -1,0 +1,45 @@
+<h1>📚 Список книг</h1>
+
+<!-- 🔍 ПОИСК -->
+<form method="GET">
+    <input type="text" name="q" value="{{ search }}" placeholder="Поиск книги">
+    <button type="submit">Поиск</button>
+</form>
+
+<hr>
+
+<!-- 📚 СПИСОК -->
+{% for book in page_obj %}
+    <div style="margin-bottom: 15px;">
+
+        <h2>
+            <a href="{% url 'book_detail' book.id %}">
+                {{ book.title }}
+            </a>
+        </h2>
+
+        <p><b>Автор:</b> {{ book.author }}</p>
+        <p><b>Цена:</b> {{ book.price }}</p>
+
+        <!-- 👁 добавь это чтобы видеть просмотры -->
+        <p><b>Просмотры:</b> {{ book.views }}</p>
+
+    </div>
+{% empty %}
+    <p>Книг пока нет</p>
+{% endfor %}
+
+<hr>
+
+<!-- 📄 ПАГИНАЦИЯ -->
+<div>
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&q={{ search }}">⬅ Назад</a>
+    {% endif %}
+
+    <span>Страница {{ page_obj.number }}</span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&q={{ search }}">Вперед ➡</a>
+    {% endif %}
+</div>

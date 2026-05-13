@@ -1,0 +1,36 @@
+<h1>🐎 Конные туры</h1>
+
+<form method="GET">
+    <input type="text" name="q" value="{{ search }}" placeholder="Поиск">
+    <button>Поиск</button>
+</form>
+
+<hr>
+
+{% for company in page_obj %}
+    <h3>
+        <a href="{% url 'tour_detail' company.id %}">
+            {{ company.name }}
+        </a>
+    </h3>
+
+    <p>⭐ {{ company.avg_rating|default:"Нет" }}</p>
+    <p>👁 {{ company.views }}</p>
+
+    <hr>
+{% empty %}
+    <p>Нет туров</p>
+{% endfor %}
+
+<!-- 📄 ПАГИНАЦИЯ -->
+<div>
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&q={{ search }}">⬅ Назад</a>
+    {% endif %}
+
+    <span>Страница {{ page_obj.number }}</span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&q={{ search }}">Вперед ➡</a>
+    {% endif %}
+</div>

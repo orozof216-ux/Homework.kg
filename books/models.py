@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=200)
@@ -10,10 +11,10 @@ class Book(models.Model):
     language = models.CharField(max_length=50)
     published_date = models.DateField()
 
-    # можно НЕ заполнять
     cover = models.ImageField(upload_to='books/', blank=True, null=True)
     file = models.FileField(upload_to='books/files/', blank=True, null=True)
 
+    views = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

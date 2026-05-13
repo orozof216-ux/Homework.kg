@@ -3,10 +3,14 @@ Django settings for main project.
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-jzpq#jcy7r_9!vbmba00ilf^g71y7m#w)b@#+r15xv90kkfmdt'
+load_dotenv()
+
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 

@@ -17,9 +17,10 @@ class Horse(models.Model):
         return f"{self.name} - {self.owner}"
 
 
-# компания
 class TourCompany(models.Model):
     name = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    views = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
@@ -36,7 +37,6 @@ class Service(models.Model):
 class Review(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     company = models.ForeignKey(TourCompany, on_delete=models.CASCADE, related_name='reviews')
-
     rating = models.IntegerField()
     text = models.TextField()
 
@@ -45,10 +45,9 @@ class Review(models.Model):
             raise ValidationError("Оценка только от 1 до 5")
 
     def __str__(self):
-        return f"{self.person} - {self.company} ({self.rating})"
+        return f"{self.person} - {self.company}"
 
 
-# 🐎 Booking (добавлено)
 class Booking(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     company = models.ForeignKey(TourCompany, on_delete=models.CASCADE)
@@ -56,4 +55,4 @@ class Booking(models.Model):
     people_count = models.IntegerField()
 
     def __str__(self):
-        return f"{self.person} - {self.company} ({self.date})"
+        return f"{self.person} - {self.company}"

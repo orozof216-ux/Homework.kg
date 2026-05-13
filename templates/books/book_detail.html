@@ -1,5 +1,10 @@
 <h1>{{ book.title }}</h1>
 
+<hr>
+
+<!-- 👁 Просмотры (лучше снизу или сверху — без разницы) -->
+<p><b>Просмотры:</b> {{ book.views }}</p>
+
 <p><b>Автор:</b> {{ book.author }}</p>
 <p><b>Описание:</b> {{ book.description }}</p>
 <p><b>Цена:</b> {{ book.price }}</p>
@@ -8,10 +13,14 @@
 <p><b>Язык:</b> {{ book.language }}</p>
 <p><b>Дата:</b> {{ book.published_date }}</p>
 
+<hr>
+
+<!-- 📷 ОБЛОЖКА -->
 {% if book.cover %}
     <img src="{{ book.cover.url }}" width="200">
 {% endif %}
 
+<!-- 📁 ФАЙЛ -->
 {% if book.file %}
     <p>
         <a href="{{ book.file.url }}">📥 Скачать файл</a>
@@ -19,4 +28,5 @@
 {% endif %}
 
 <br>
+
 <a href="{% url 'book_list' %}">⬅ Назад</a>

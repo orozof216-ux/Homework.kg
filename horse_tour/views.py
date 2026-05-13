@@ -1,18 +1,46 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.paginator import Paginator
+from django.db.models import Avg, F
+
 from .models import TourCompany, Booking
 from .forms import BookingForm
-from django.db.models import Avg
 
 
+# 🐎 LIST + SEARCH + PAGINATION
 def company_list(request):
-    companies = TourCompany.objects.all().annotate(avg_rating=Avg('reviews__rating'))
+    search = request.GET.get('q', '')
 
-    return render(request, 'horse_list.html', {
-        'companies': companies
+    companies = TourCompany.objects.all().annotate(
+        avg_rating=Avg('reviews__rating')
+    )
+
+    # 🔍 поиск
+    if search:
+        companies = companies.filter(name__icontains=search)
+
+    # 📄 пагинация
+    paginator = Paginator(companies, 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'horse_tour/horse_list.html', {
+        'page_obj': page_obj,
+        'search': search
     })
 
 
-# READ
+# 🐎 DETAIL + VIEWS
+def tour_detail(request, pk):
+    TourCompany.objects.filter(pk=pk).update(views=F('views') + 1)
+
+    tour = get_object_or_404(TourCompany, pk=pk)
+
+    return render(request, 'horse_tour/tour_detail.html', {
+        'tour': tour
+    })
+
+
+# 📌 BOOKINGS (READ)
 def booking_list(request):
     bookings = Booking.objects.all()
 
@@ -21,7 +49,7 @@ def booking_list(request):
     })
 
 
-# CREATE
+# 📌 CREATE
 def booking_create(request):
     form = BookingForm(request.POST or None)
 
@@ -34,7 +62,7 @@ def booking_create(request):
     })
 
 
-# UPDATE
+# 📌 UPDATE
 def booking_update(request, id):
     booking = get_object_or_404(Booking, id=id)
 
@@ -49,7 +77,7 @@ def booking_update(request, id):
     })
 
 
-# DELETE
+# 📌 DELETE
 def booking_delete(request, id):
     booking = get_object_or_404(Booking, id=id)
     booking.delete()
