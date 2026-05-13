@@ -13,7 +13,6 @@ urlpatterns = [
 
     path('tour/<int:pk>/', tour_detail, name='tour_detail'),
 
-    # 📌 bookings
     path('bookings/', booking_list, name='booking_list'),
     path('bookings/create/', booking_create, name='booking_create'),
     path('bookings/update/<int:id>/', booking_update, name='booking_update'),

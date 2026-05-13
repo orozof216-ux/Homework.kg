@@ -6,7 +6,6 @@ from .models import TourCompany, Booking
 from .forms import BookingForm
 
 
-# 🐎 LIST + SEARCH + PAGINATION
 def company_list(request):
     search = request.GET.get('q', '')
 
@@ -14,11 +13,9 @@ def company_list(request):
         avg_rating=Avg('reviews__rating')
     )
 
-    # 🔍 поиск
     if search:
         companies = companies.filter(name__icontains=search)
 
-    # 📄 пагинация
     paginator = Paginator(companies, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -29,7 +26,6 @@ def company_list(request):
     })
 
 
-# 🐎 DETAIL + VIEWS
 def tour_detail(request, pk):
     TourCompany.objects.filter(pk=pk).update(views=F('views') + 1)
 
@@ -40,7 +36,6 @@ def tour_detail(request, pk):
     })
 
 
-# 📌 BOOKINGS (READ)
 def booking_list(request):
     bookings = Booking.objects.all()
 
@@ -49,7 +44,6 @@ def booking_list(request):
     })
 
 
-# 📌 CREATE
 def booking_create(request):
     form = BookingForm(request.POST or None)
 
@@ -62,7 +56,6 @@ def booking_create(request):
     })
 
 
-# 📌 UPDATE
 def booking_update(request, id):
     booking = get_object_or_404(Booking, id=id)
 
@@ -77,7 +70,6 @@ def booking_update(request, id):
     })
 
 
-# 📌 DELETE
 def booking_delete(request, id):
     booking = get_object_or_404(Booking, id=id)
     booking.delete()
