@@ -1,13 +1,23 @@
-from django.shortcuts import render, redirect
+from django.views.generic import CreateView, ListView, View
+from django.shortcuts import redirect, render
+from django.contrib.auth import login, logout
+
 from .forms import RegisterForm, ResumeForm, LoginForm
 from .models import Resume
 
-from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
 
+class RegisterView(View):
 
-def register_view(request):
-    if request.method == 'POST':
+    def get(self, request):
+        user_form = RegisterForm()
+        resume_form = ResumeForm()
+
+        return render(request, 'resume/register.html', {
+            'user_form': user_form,
+            'resume_form': resume_form
+        })
+
+    def post(self, request):
         user_form = RegisterForm(request.POST)
         resume_form = ResumeForm(request.POST, request.FILES)
 
@@ -21,18 +31,19 @@ def register_view(request):
             login(request, user)
             return redirect('resume_list')
 
-    else:
-        user_form = RegisterForm()
-        resume_form = ResumeForm()
-
-    return render(request, 'resume/register.html', {
-        'user_form': user_form,
-        'resume_form': resume_form
-    })
+        return render(request, 'resume/register.html', {
+            'user_form': user_form,
+            'resume_form': resume_form
+        })
 
 
-def login_view(request):
-    if request.method == 'POST':
+class LoginView(View):
+
+    def get(self, request):
+        form = LoginForm()
+        return render(request, 'resume/login.html', {'form': form})
+
+    def post(self, request):
         form = LoginForm(request, data=request.POST)
 
         if form.is_valid():
@@ -40,22 +51,17 @@ def login_view(request):
             login(request, user)
             return redirect('resume_list')
 
-    else:
-        form = LoginForm()
-
-    return render(request, 'resume/login.html', {
-        'form': form
-    })
+        return render(request, 'resume/login.html', {'form': form})
 
 
-def logout_view(request):
-    logout(request)
-    return redirect('login')
+class LogoutView(View):
+
+    def get(self, request):
+        logout(request)
+        return redirect('login')
 
 
-@login_required
-def resume_list(request):
-    resumes = Resume.objects.all()
-    return render(request, 'resume/resume_list.html', {
-        'resumes': resumes
-    })
+class ResumeListView(ListView):
+    model = Resume
+    template_name = 'resume/resume_list.html'
+    context_object_name = 'resumes'

@@ -1,32 +1,34 @@
-from django.shortcuts import render, get_object_or_404
-from django.core.paginator import Paginator
+from django.views.generic import ListView, DetailView
 from django.db.models import F
+
 from .models import Book
 
 
-def book_list(request):
-    search = request.GET.get('q', '')
+class BookListView(ListView):
+    model = Book
+    template_name = 'books/book_list.html'
+    context_object_name = 'page_obj'  
+    paginate_by = 3
 
-    books = Book.objects.all()
+    def get_queryset(self):
+        search = self.request.GET.get('q', '')
 
-    if search:
-        books = books.filter(title__icontains=search)
+        books = Book.objects.all()
 
-    paginator = Paginator(books, 3)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+        if search:
+            books = books.filter(title__icontains=search)
 
-    return render(request, 'books/book_list.html', {
-        'page_obj': page_obj,
-        'search': search
-    })
+        return books
 
 
-def book_detail(request, pk):
-    Book.objects.filter(pk=pk).update(views=F('views') + 1)
+class BookDetailView(DetailView):
+    model = Book
+    template_name = 'books/book_detail.html'
+    context_object_name = 'book'
 
-    book = get_object_or_404(Book, pk=pk)
+    def get_object(self):
+        obj = super().get_object()
 
-    return render(request, 'books/book_detail.html', {
-        'book': book
-    })
+        Book.objects.filter(pk=obj.pk).update(views=F('views') + 1)
+
+        return obj

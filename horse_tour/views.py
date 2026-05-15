@@ -1,77 +1,65 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.core.paginator import Paginator
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Avg, F
+from django.urls import reverse_lazy
 
 from .models import TourCompany, Booking
 from .forms import BookingForm
 
 
-def company_list(request):
-    search = request.GET.get('q', '')
+class CompanyListView(ListView):
+    model = TourCompany
+    template_name = 'horse_tour/horse_list.html'
+    context_object_name = 'page_obj'
+    paginate_by = 3
 
-    companies = TourCompany.objects.all().annotate(
-        avg_rating=Avg('reviews__rating')
-    )
+    def get_queryset(self):
+        search = self.request.GET.get('q', '')
 
-    if search:
-        companies = companies.filter(name__icontains=search)
+        companies = TourCompany.objects.all().annotate(
+            avg_rating=Avg('reviews__rating')
+        )
 
-    paginator = Paginator(companies, 3)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+        if search:
+            companies = companies.filter(name__icontains=search)
 
-    return render(request, 'horse_tour/horse_list.html', {
-        'page_obj': page_obj,
-        'search': search
-    })
-
-
-def tour_detail(request, pk):
-    TourCompany.objects.filter(pk=pk).update(views=F('views') + 1)
-
-    tour = get_object_or_404(TourCompany, pk=pk)
-
-    return render(request, 'horse_tour/tour_detail.html', {
-        'tour': tour
-    })
+        return companies
 
 
-def booking_list(request):
-    bookings = Booking.objects.all()
+class TourDetailView(DetailView):
+    model = TourCompany
+    template_name = 'horse_tour/tour_detail.html'
+    context_object_name = 'tour'
 
-    return render(request, 'booking/booking_list.html', {
-        'bookings': bookings
-    })
+    def get_object(self):
+        obj = super().get_object()
 
+        # 🔥 views +1 как у тебя было
+        TourCompany.objects.filter(pk=obj.pk).update(views=F('views') + 1)
 
-def booking_create(request):
-    form = BookingForm(request.POST or None)
-
-    if form.is_valid():
-        form.save()
-        return redirect('booking_list')
-
-    return render(request, 'booking/booking_form.html', {
-        'form': form
-    })
+        return obj
 
 
-def booking_update(request, id):
-    booking = get_object_or_404(Booking, id=id)
-
-    form = BookingForm(request.POST or None, instance=booking)
-
-    if form.is_valid():
-        form.save()
-        return redirect('booking_list')
-
-    return render(request, 'booking/booking_form.html', {
-        'form': form
-    })
+class BookingListView(ListView):
+    model = Booking
+    template_name = 'booking/booking_list.html'
+    context_object_name = 'bookings'
 
 
-def booking_delete(request, id):
-    booking = get_object_or_404(Booking, id=id)
-    booking.delete()
+class BookingCreateView(CreateView):
+    model = Booking
+    form_class = BookingForm
+    template_name = 'booking/booking_form.html'
+    success_url = reverse_lazy('booking_list')
 
-    return redirect('booking_list')
+
+class BookingUpdateView(UpdateView):
+    model = Booking
+    form_class = BookingForm
+    template_name = 'booking/booking_form.html'
+    success_url = reverse_lazy('booking_list')
+
+
+class BookingDeleteView(DeleteView):
+    model = Booking
+    template_name = 'booking/booking_confirm_delete.html'
+    success_url = reverse_lazy('booking_list')

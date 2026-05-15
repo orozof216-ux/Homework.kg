@@ -86,7 +86,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'ru-Ru'
+LANGUAGE_CODE = 'ru-ru'   
 
 TIME_ZONE = 'Asia/Bishkek'
 
@@ -94,9 +94,9 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'   
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'     
 MEDIA_ROOT = BASE_DIR / 'media'
 
 LOGIN_URL = '/resume/login/'

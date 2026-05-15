@@ -1,8 +1,8 @@
 from django.urls import path
-from . import views
+from .views import AutoListView  
 
 app_name = 'auto'
 
 urlpatterns = [
-    path('', views.auto_view, name='auto'),
+    path('', AutoListView.as_view(), name='auto'),  
 ]

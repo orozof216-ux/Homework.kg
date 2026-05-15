@@ -1,16 +1,11 @@
-from django.shortcuts import render
+from django.views.generic import ListView
 from . import models
 
 
-def auto_view(request):
-    if request.method == 'GET':
-        cars = models.Car.objects.all().order_by('-id')
-        context = {
-            'cars': cars,
+class AutoListView(ListView):
+    model = models.Car  
+    template_name = 'cars.html'  
+    context_object_name = 'cars'  
 
-        }
-    return render(
-        request,
-        template_name='cars.html',
-        context=context
-    )
+    def get_queryset(self):
+        return models.Car.objects.all().order_by('-id')
